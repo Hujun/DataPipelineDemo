@@ -1,0 +1,6 @@
+FROM python:3.6
+COPY ./rcv_data.py /home
+WORKDIR /home
+RUN pip install -U websockets aioredis hiredis
+ENTRYPOINT ["python"]
+CMD ["rcv_data.py"]

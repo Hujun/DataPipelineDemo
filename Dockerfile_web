@@ -1,0 +1,5 @@
+FROM python:3.6
+COPY ./index.html /home
+WORKDIR /home
+ENTRYPOINT ["python"]
+CMD ["-m", "http.server", "8687"]

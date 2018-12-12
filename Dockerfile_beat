@@ -1,0 +1,6 @@
+FROM python:3.6
+COPY ./gen_data.py /home
+WORKDIR /home
+RUN pip install -U "celery[redis]"
+ENTRYPOINT ["celery"]
+CMD ["-A", "gen_data.app", "beat", "-l", "info"]

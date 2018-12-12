@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+    redis:
+        image: redis
+        restart: always
+        container_name: data_pipeline_demo_redis
+    sender:
+        build:
+            context: .
+            dockerfile: Dockerfile_data_sender
+        restart: always
+        container_name: data_pipeline_demo_sender
+        depends_on:
+            - redis
+        environment:
+            REDIS_HOST: redis
+    beat:
+        build:
+            context: .
+            dockerfile: Dockerfile_beat
+        restart: always
+        container_name: data_pipeline_demo_beat
+        depends_on:
+            - redis
+        environment:
+            REDIS_HOST: redis
+    receiver:
+        build:
+            context: .
+            dockerfile: Dockerfile_data_receiver
+        restart: always
+        container_name: data_pipeline_demo_receiver
+        ports:
+            - "8686:8686"
+        depends_on:
+            - redis
+        environment:
+            REDIS_HOST: redis
+    web:
+        build:
+            context: .
+            dockerfile: Dockerfile_web
+        restart: always
+        container_name: data_pipeline_demo_web
+        depends_on:
+            - receiver
+        ports:
+            - "8687:8687"
+
